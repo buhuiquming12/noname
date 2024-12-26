@@ -1,0 +1,2449 @@
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">{{ message }}</div>
+	<button onclick="f1()">加一</button>
+	<script>
+		import { createApp } from 'Vue'
+		const vueapp={
+			data() {
+				return {
+					message: 0
+				}
+			}
+		}
+		//const app = createApp(App)
+		const app=createApp(vueapp).mount("#app")
+		function f1(){			
+			app.message++;
+		}
+	</script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<p>{{fullName}}</p>	
+		First Name:<input type='text' v-model="firstName"> <br><br>
+		Last Name:<input type='text' v-model="lastName"> <br><br>
+		Full Name:<input type='text' v-model="fullName"> <br><br>
+	</div>
+	<script> 
+    const vm=Vue.createApp({
+        data(){
+			return{
+				firstName: 'Smith',
+				lastName: 'Will'
+			}
+        },
+        computed:{
+			fullName:{
+				get(){
+					return this.firstName+ ' ' +this.lastName;
+				},
+				set(newValue){
+					let names=newValue.split(' ');
+					this.firstName=names[0];
+					this.lastName=names[1];
+				}
+			}
+		}
+    }).mount("#app");
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<p>{{fullName}}</p>	
+		<p>{{fullName}}</p>
+		<p>{{getFullName()}}</p>
+		<p>{{getFullName()}}</p>
+		First Name:<input type='text' v-model="firstName"> <br><br>
+		Last Name:<input type='text' v-model="lastName"> <br><br>
+	</div>
+	<script> 
+    const vm=Vue.createApp({
+        data(){
+			return{
+				firstName: 'Smith',
+				lastName: 'Will'
+			}
+        },
+        computed:{
+			fullName:{
+				get(){
+					alert('计算属性。。。')
+					return this.firstName+ ' ' +this.lastName;
+				},
+				set(newValue){
+					let names=newValue.split(' ');
+					this.firstName=names[0];
+					this.lastName=names[1];
+				}
+			}
+		},
+		methods:{
+			getFullName(){
+				alert('方法。。。');
+				return this.firstName+ ' ' +this.lastName;
+			}
+		}
+    }).mount("#app");
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>已完成的工作计划</h1>
+		<ul>
+				<li v-for="plan in completedPlans">{{plan.content}}</li>
+		</ul>
+		<h1>未完成的工作计划</h1>
+		<ul>
+				<li v-for="plan in incompletePlans">{{plan.content}}</li>
+		</ul>
+	</div>
+	<script> 
+    const vm=Vue.createApp({
+        data(){
+			return{
+				plans: [
+					{content: '写日记', isComplete: false},
+					{content: '做PPT', isComplete: false},
+					{content: '运动', isComplete: false},
+					{content: '学习高等数学', isComplete: true},
+					{content: '背英语单词', isComplete: true},
+				]
+			}
+        },
+        computed:{
+			completedPlans(){
+				return this.plans.filter(plan=>plan.isComplete);
+			},
+			incompletePlans(){
+				return this.plans.filter(plan=>!plan.isComplete);
+			}
+		}
+    }).mount("#app");
+	/*
+	箭头函数
+	（1）let fun1 = plan => plan.isComplete    
+	相当于：
+	function fun1(plan){
+		return plan.isComplete;	
+	}
+	（2）let welcome = () => "welcome you"
+	相当于：
+	function welcome(){
+		return "welcome you";
+	}
+	（3）let add=(a,b)=>{
+					let c=a+b;
+					return c;
+				}
+	相当于：
+		function add(a,b){
+			let c=a+b;
+			return c;
+		}
+	*/
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		div{
+			border: 1px solid black;
+			width:280px;
+			padding:10px;
+			margin:10px;
+		}
+		span{
+			display:inline-block;
+			width:100px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<font style="font-weight:bold;">单位换算：</font><br>
+		<span>千米：</span><input type="text" v-model="kilometers1"><br>
+		<span>米：</span><input type="text" v-model='meters0'><br>
+	</div>
+	<script>
+		//用计算属性实现：
+		const vm1=Vue.createApp({
+			data(){
+				return{
+					kilometers1:1,
+				}
+			},
+			computed:{
+				meters0:{
+					get(){return this.kilometers1*1000;},
+					set(newValue){this.kilometers1=newValue/1000;}
+				}
+			}
+		}).mount("#app1");
+	</script>
+	<div id="app2">
+		<font style="font-weight:bold;">货币兑换：</font><br>
+		<span>人民币(元)：</span><input type="text" v-model="kilometers2"><br>
+		<span>港元：</span><input type="text" v-model='meters2'><br>
+	</div>
+	<script>
+		const vm2=Vue.createApp({
+			data(){
+				return{
+					kilometers2:0,
+					meters2:0
+				}
+			},
+			watch:{
+				kilometers2(val){
+					this.meters2=val*1.0886;
+				},
+				meters2(val,oldVal){
+					this.kilometers2=val/1.0886;
+				}
+			}
+		}).mount("#app2");
+	</script>
+	<div id="app3">
+		<font>使用监听器的另一个作用：</font><br>
+		请输入您的问题：<input type="text" v-model="question"><br>
+		客服回答：<font>{{answer}}</font>
+	</div>
+	<script>
+		const vm3=Vue.createApp({
+			data(){
+				return{
+					question:'',
+					answer:''
+				}
+			},
+			watch:{
+				question(val){ 
+					//从后台服务器获取答案，需要一点时间
+					//设置中间状态
+					answer='请稍后……';
+					//获取到答案后，赋值给answer
+				}
+			}			
+		}).mount("#app3");
+	</script>
+	<div id="app4">
+		请输入您的年龄：<input type="text" v-model="age1"><br>
+		<font>{{info1}}</font>
+	</div>
+	<script>
+		const vm4=Vue.createApp({
+			data(){
+				return{
+					age1:'',
+					info1:''
+				}
+			},
+			watch:{
+				//监听器的第一种形式
+				age1(val){ 
+					if(val>=18) 
+						this.info1='已成年';
+					else
+						this.info1='未成年';
+				}
+			}
+		}).mount("#app4");
+	</script>
+	<div id="app5">
+		请输入您的年龄：<input type="text" v-model="age2"><br>
+		<font>{{info2}}</font>
+	</div>
+	<script>
+		const vm5=Vue.createApp({
+			data(){
+				return{
+					age2:'',
+					info2:''
+				}
+			},
+			watch:{
+				//监听器的第二种形式
+				age2:'checkAge'
+			},
+			methods:{
+				checkAge(){
+					if(this.age2>=18) 
+						this.info2='已成年';
+					else
+						this.info2='未成年';
+				}
+			}
+		}).mount("#app5");
+	</script>
+	<div id="app6">
+		请输入您的年龄：<input type="text" v-model="age3"><br>
+		<font>{{info3}}</font>
+	</div>
+	<script>
+		const vm6=Vue.createApp({
+			data(){
+				return{
+					age3:'',
+					info3:''
+				}
+			}
+		}).mount("#app6");
+		//监听器的第三种形式
+		vm6.$watch('age3', (val)=>{
+			if(vm6.age3>=18) 
+				vm6.info3='已成年';
+			else
+				vm6.info3='未成年';
+		});
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		div{
+			border: 1px solid black;
+			width:280px;
+			padding:10px;
+			margin:10px;
+		}
+		span{
+			display:inline-block;
+			width:100px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app2">
+		<p>Answer the question：</p>
+		(1) <input type="checkbox" v-model="QA.user_answer">{{QA.question}}<br>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答题情况：{{QA.user_flag}}</p>
+	</div>
+	<script>
+		const vm2=Vue.createApp({
+			data(){
+				return{
+					QA:{
+						question:"vue.js的作者是尤雨溪",
+						answer:true,
+						user_answer:false,
+						user_flag:false
+					}
+				}
+			},
+			watch:{
+				//1、watch 选项也支持把键设置成用 . 分隔的路径：
+				'QA.user_answer'(){
+					this.QA.user_flag=(this.QA.answer==this.QA.user_answer);
+				}
+				//2、watch 默认是浅层的：被侦听的属性，仅在被赋新值时，才会触发回调函数——而嵌套属性的变化不会触发。
+				/*QA:{
+					handler(newValue, oldValue) {
+						// 注意：在嵌套的变更中，
+						// 只要没有替换对象本身，
+						// 那么这里的 `newValue` 和 `oldValue` 相同
+						this.QA.user_flag=(this.QA.answer==this.QA.user_answer);
+					},
+					//如果想侦听所有嵌套的变更，你需要深层侦听器：
+					//deep: true
+					//在 Vue 3.5+ 中，deep 选项还可以是一个数字，表示最大遍历深度——即 Vue 应该遍历对象嵌套属性的级数。
+				}*/
+			}
+		}).mount("#app2");
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		div{
+			border: 1px solid black;
+			width:400px;
+			padding:10px;
+			margin:10px;
+		}
+		span{
+			display:inline-block;
+			width:100px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app2">
+		<p>Answer those questions：</p>
+		<template v-for="(QA, index) in QAs">
+			{{index+1}}. {{QA.question}}<br>
+			<span v-for="optionItem in QA.options">
+				<input type="radio" :value="optionItem" v-model="QA.user_answer">{{optionItem}}
+			</span>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;答题情况：{{QA.user_flag}}</p>
+		</template>
+	</div>
+	<script>
+		const vm2=Vue.createApp({
+			data(){
+				return{
+					QAs:[{
+						question:"vue.js的作者是尤雨溪",
+						options:["yes","no"],
+						answer:"yes",
+						user_answer:"",
+						user_flag:true
+					},
+					{
+						question:"vue.js以数据驱动和组件化思想构建",
+						options:["yes","no"],
+						answer:"yes",
+						user_answer:"",
+						user_flag:true
+					}
+					]
+				}
+			},
+			watch:{
+				//1、watch 选项也支持把键设置成用 . 分隔的路径：
+				/*
+				'QA.user_answer'(){
+					this.QA.user_flag=(this.QA.answer==this.QA.user_answer);
+				}*/
+				
+				QAs:{
+					handler(newValue, oldValue) {
+						for(let i=0; i< newValue.length;i++){
+							if(newValue[i].answer!=newValue[i].user_answer)
+								newValue[i].user_flag=false;
+							else
+								newValue[i].user_flag=true;
+						}
+					},
+					deep: true,
+					//深度侦听需要遍历被侦听对象中的所有嵌套的属性，当用于大型数据结构时，开销很大。
+					//因此请只在必要时才使用它，并且要留意性能。
+					
+					//仅当数据源变化时，才会执行回调。但在某些场景中，我们希望在创建侦听器时，立即执行一遍回调。
+					//immediate: true
+					//每当被侦听源发生变化时，侦听器的回调就会执行。如果希望回调只在源变化时触发一次，请使用 once: true 选项。
+					//once: true
+					
+				}
+			}
+		}).mount("#app2");
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		.active{width:100px;height:100px;background:green;}
+		.txtDanger{font-size: 24px;color:red;}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<!--绑定字符串-->
+		<div v-bind:class="message">hello 1</div>
+		<!--绑定对象-->
+		<div v-bind:class="{active: isActive}">hello 2</div>
+		<!--绑定对象，对象中有多个元素-->
+		<div v-bind:class="{active: isActive, txtDanger:hasError}">hello 3</div>
+		<!--绑定对象-->
+		<div v-bind:class="classObj">hello 4</div>
+		<!--绑定数组-->
+		<div v-bind:class="[activeClass, errorClass]">hello 5</div>
+		<!--绑定数组    使用三元运算符-->
+		<div v-bind:class="[isActive?activeClass:' ', errorClass]">hello 6</div>
+		<!--绑定数组    使用对象语法-->
+		<div v-bind:class="[{active: isActive}, errorClass]">hello 6</div>
+	</div>
+	<script>
+		const vm= Vue.createApp({
+			data(){
+				return{
+					message:'active',
+					isActive: true,
+					hasError: true,
+					classObj:{
+						active: true,
+						txtDanger: true
+					},
+					activeClass: 'active',
+					errorClass: 'txtDanger'
+				}
+			}
+		}).mount('#app');
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!--绑定对象 1-->
+		<div v-bind:style="{color: activeColor, fontSize: fontSize}">hello 1</div>
+		<!--绑定对象 2-->
+		<div v-bind:style="styleObj">hello 2</div>		
+		<!--绑定数组-->
+		<div v-bind:style="[baseStyles, moreStyles]">hello 3</div>		
+	</div>
+	<script>
+		const vm= Vue.createApp({
+			data(){
+				return{
+					activeColor: 'red',
+					fontSize: '30px',
+					styleObj:{
+						color: 'red',
+						fontSize: '30px'
+					},
+					baseStyles:{
+						border: 'solid 2px red'
+					},
+					moreStyles:{
+						width: '100px',
+						height: '100px',
+						background: 'orange'
+					}
+				}
+			}
+		}).mount('#app');
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		span{
+			border: 1px solid red;
+		}
+		div{
+			border: 1px solid black;
+			width:300px;
+			padding:10px;
+			margin:10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<input type='text' v-model="message" value='JavaScript'>忽略value属性
+		<br><br>
+		使用trim修饰符：<input type='text' v-model.trim="message" value='JavaScript'>
+		<br><br>
+		使用lazy修饰符：<input type='text' v-model.lazy="message" value='JavaScript'>
+		<br><br>	
+		使用number修饰符：<input type='text' v-model.number="message" value='JavaScript'>
+		<br><br>			
+		<textarea v-model.lazy="message"></textarea>
+		<br><br>
+		<span>{{message+1}}</span>
+	</div>
+	<script>
+		const vm1=Vue.createApp({
+			data(){
+				return{
+					message: 'Vue.js'
+				}
+			}
+		}).mount("#app1");
+	</script>
+	<div id="app3">
+		<input type='checkbox' v-model="isAgree1" value="hello">
+		<span>{{isAgree1}}</span>
+		<br><br>
+		绑定v-model，使用true-value和false-value属性：<br>
+		<input type='checkbox' v-model="isAgree2" true-value='trueValue' false-value='falseValue'>
+		<span>{{isAgree2}}</span>
+		<br><br>
+		v-model和v-bind指令的结合使用：<br>
+		<input type='checkbox' v-model="isAgree3" :true-value='trueValue' :false-value='falseValue'>
+		<span>{{isAgree3}}</span>
+	</div>
+	<script>
+		const vm3=Vue.createApp({
+			data(){
+				return{
+					isAgree1: false,
+					isAgree2: false,
+					isAgree3: false,
+					trueValue: '真',
+					falseValue:'假'
+				}
+			}
+		}).mount("#app3");
+	</script>
+	<div id="app4">
+		<input type='radio' v-model="gender1" value='男'>男
+		<input type='radio' v-model="gender1" value='女'>女
+		<span>{{gender1}}</span>
+		<br><br>
+		v-model和v-bind指令的结合使用：<br>
+		<input type='radio' v-model="gender2" :value='genderValue[0]'>男
+		<input type='radio' v-model="gender2" :value='genderValue[1]'>女
+		<span>{{gender2}}</span>
+	</div>
+	<script>
+		const vm4=Vue.createApp({
+			data(){
+				return{
+					gender1: '男/女',
+					gender2: '男/女',
+					genderValue:['先生','女士']
+				}
+			}
+		}).mount("#app4");
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- 第三步：使用组件-->
+		<mybtn></mybtn>
+	</div>
+	<script>
+		//第一步：定义组件对象
+		const comObj1={
+			template: '<button>click</button>'
+		}
+		//第二步：注册组件
+		const vm1=Vue.createApp({});
+		vm1.component('mybtn', comObj1); 
+		vm1.mount('#app');
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- 第三步：使用组件-->
+		<counterbtn></counterbtn>
+	</div>
+	<script>
+		//第一步：定义组件对象
+		const comObj2={
+			data(){
+				return {
+					count:0
+				}
+			},
+			template: '<button @click="count++">click time：{{count}}</button>'
+		}
+		//第二步：注册组件
+		const vm1=Vue.createApp({});
+		vm1.component('counterbtn', comObj2); 
+		vm1.mount('#app');
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- 第三步：使用组件-->
+		<CounterBtn></CounterBtn>
+	</div>
+	<script>
+		//第一步：定义组件对象
+		const comObj2={
+			data(){
+				return {
+					count:0
+				}
+			},
+			template: '<button @click="count++">click time：{{count}}</button>'
+		}
+		//第二步：注册组件
+		const vm1=Vue.createApp({});
+		vm1.component('CounterBtn', comObj2); //单词首字母大写
+		vm1.mount('#app');
+	</script>
+</body>
+</html><html>
+<head>
+<!--第一步：安装Vue.js -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<div id="app">{{ message }}</div>
+<button onclick="f1()">challenge</button>
+<script>
+	/*创建Vue实例*/
+	const vue_obj={
+		data() {
+			return {
+				message: 'Hello Vue!'
+			}
+		}
+	}
+	//创建Vue对象常见的第一种写法
+	const vue_app1 = Vue.createApp(vue_obj);
+	//创建Vue对象常见的第二种写法
+	const vue_app2 = Vue.createApp({
+		data() {
+			return {
+				message: 'Hello Vue!'
+			}
+		}
+	})
+	//创建Vue对象常见的第三种写法
+	const { createApp } = Vue //对象的解构
+		//let [a,b,c] = [1,2,3]   ------ 数组的解构
+		//let [log, sin, cos] =Math  ------ 对象的解构
+	const vue_app3 = createApp(vue_obj);
+	/*绑定DOM元素*/
+	const vm = vue_app3.mount("#app")
+	
+</script>
+<script>
+  function f1(){
+	vm.message="0"
+  }
+</script>
+
+
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- 第三步：使用组件-->
+		<counter-btn></counter-btn>
+	</div>
+	<template id="t1">
+		<button @click="count++">click time：{{count}}</button>
+	</template>
+	<script>
+		//第一步：定义组件对象
+		const comObj2={
+			data(){
+				return {
+					count:0
+				}
+			},
+			//template: "#t1"
+			template: '<button @click="count++">click time：{{count}}</button> ' 
+		}
+		//第二步：注册组件
+		const vm1=Vue.createApp({});
+		vm1.component('CounterBtn', comObj2); //单词首字母大写
+		vm1.mount('#app');
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- 第四步：使用组件-->
+		<counter-btn></counter-btn>
+	</div>
+	<script>
+		//第一步：定义子组件对象
+		const comObj1={
+			data(){
+				return {
+					count:0
+				}
+			},
+			template: '<button @click="count++">click time：{{count}}</button>'
+		}
+		//第二步：定义父组件对象
+		const comObj2={
+			components:{
+				comObj1  //注册子组件
+			}, 
+			template: '<div style="border:1px solid red; width:100px"><comObj1></comObj1></div>'
+		}
+		//第三步：注册父组件
+		const vm1=Vue.createApp({});	
+		vm1.component('counterBtn', comObj2); 
+		vm1.mount('#app');
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- 第三步：使用组件-->
+		<my-btn></my-btn>
+		<counter-btn></counter-btn>
+		<counter-btn2></counter-btn2>
+	</div>
+	<div id="app2">
+		<!-- 第三步：使用组件-->
+		<counter-btn3></counter-btn3>
+	</div>
+	<script>
+		//第一步：定义组件对象
+		const comObj1={
+			template: '<button>click</button>'
+		}
+		const comObj2={
+			data(){
+				return {
+					count:0
+				}
+			},
+			template: '<button @click="count++">click time：{{count}}</button>'
+		}
+		//第二步：注册组件
+		const vm1=Vue.createApp({});
+		vm1.component('myBtn', comObj1); //全局注册
+		vm1.component('counterBtn', comObj2); //全局注册
+		
+		const comObj3={
+			components:{
+				cb: comObj2 //本地注册
+			}, //将组件添加到另一个组件
+			template: '<div><cb></cb></div>'
+		}
+		vm1.component('counterBtn2', comObj3); //全局注册
+		vm1.mount('#app');
+		
+		const vm2=Vue.createApp({
+			components:{
+				counterBtn3: comObj2 //本地注册
+			}
+		});
+		//将components属性添加到Vue实例，因此可以在Vue实例应用中使用它
+		vm2.mount('#app2');
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<my-txtbox label="account: "></my-txtbox>
+		<my-txtbox label="Email  : "></my-txtbox>
+	</div>
+	<script>
+		const myTxtbox ={
+			props: ['label'],
+			template: '<div><span>{{label}}</span><input type="text" value="请输入"></div>'
+		}
+		const vm=Vue.createApp({});
+		vm.component('myTxtbox', myTxtbox);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<my-registerbox accountname="Email:" ></my-registerbox>
+		{{msg}}
+	</div>
+	<script>
+		const myTxtbox ={
+			props: ['label'],
+			template: '<div><span>{{label}}</span><input type="text" v-model=""></div>'
+		}
+		const myPswbox={
+			template: '<div><span>密码: </span><input type="password" value="请输入"></div>'
+		}
+		const myRegisterbox={
+			props: ['accountname'],
+			components:{
+				myTxtbox,
+				myPswbox
+			},
+			template:'<div><myTxtbox :label="accountname"></myTxtbox><br><myPswbox></myPswbox></div>'
+		}
+		const vm=Vue.createApp({});
+		vm.component('myRegisterbox', myRegisterbox);
+		vm.mount('#app1');
+		
+		//props: ['accountname'],
+		//:label="accountname"
+		//accountname="Email:"
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<post-list title="vue.js" author="zhang san" content="hello vue.js"></post-list>
+		<post-list title="javascript" author="zhang san" content="hello javascript"></post-list>
+	</div>
+	<script>
+		const postItem ={
+			props: ['title','author','content'],
+			template: `<div>
+								<h3><a href="#">{{title}}</a></h3>
+								<p>作者: {{author}}</p>
+								<p>简介：{{content}}</p>
+							</div>`
+		}
+		const vm=Vue.createApp({});
+		vm.component('postList', postItem);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<post-list :title="title" :author="author" :content="content"></post-list>
+	</div>
+	<script>		
+		const postItem ={
+			props: ['title','author','content'],
+			template: `<div>
+								<h3><a href="#">{{title}}</a></h3>
+								<p>作者: {{author}}</p>
+								<p>{{content}}</p>
+							</div>`
+		}
+		const vueapp={
+			data() {
+				return {
+					title:'vue.js',
+					author:'zhang san',
+					content:'hello vue.js'
+				}
+			}
+		}
+		const vm=Vue.createApp(vueapp);
+		vm.component('postList', postItem);
+		vm.mount('#app1');
+		//books:[{title:'vue.js',author:'zhang san',content:'hello vue.js'},{title:'javascript',author:'zhang san',content:'hello javascript'}]
+		//<post-list :title="books[0].title" :author="books[0].author" :content="books[0].content"></post-list>
+		//<post-list v-for="book in books" :title="book.title" :author="book.author" :content="book.content"></post-list>
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<post-list :book="books[0]"></post-list>
+		<post-list :book="books[1]"></post-list>
+	</div>
+	<script>		
+		const postItem ={
+			props: ['book'],
+			template: '<div><h3><a href="#">{{book.title}}</a></h3><p>作者: {{book.author}}</p><p>{{book.content}}</p></div>'
+		}
+		const vueapp={
+			data() {
+				return {
+					books:[
+									{title:'vue.js',author:'zhang san',content:'hello vue.js'},
+									{title:'javascript',author:'zhang san',content:'hello javascript'}
+								]
+				}
+			}
+		}
+		const vm=Vue.createApp(vueapp);
+		vm.component('postList', postItem);
+		vm.mount('#app1');
+	</script>	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<my-registerbox accountname="Email:"  :acvalue="msg"></my-registerbox>
+		<input type="text" v-model="msg">
+	</div>
+	<script>
+		const myTxtbox ={
+			props: ['label', "txt"],
+			template: '<div><span>{{label}}</span><input type="text" v-model="txt"></div>'
+		}
+		const myPswbox={
+			template: '<div><span>密码: </span><input type="password" value="请输入"></div>'
+		}
+		const myRegisterbox={
+			props: ['accountname', "acvalue"],
+			components:{
+				myTxtbox,
+				myPswbox
+			},
+			template:'<div><myTxtbox :label="accountname" :txt="acvalue"></myTxtbox><br><myPswbox></myPswbox></div>'
+		}
+		const vm=Vue.createApp({
+			data(){
+				return {
+					msg:"hello"
+				}
+			}
+		});
+		vm.component('myRegisterbox', myRegisterbox);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<my-registerbox accountname="Email:"  ></my-registerbox>
+	</div>
+	<script>
+		const myTxtbox ={
+			props: ['label'],
+			template: '<div><span>{{label}}</span><input type="text" ></div>'
+		}
+		const myPswbox={
+			template: '<div><span>密码: </span><input type="password" value="请输入"></div>'
+		}
+		const myRegisterbox={
+			//props: ['accountname'],
+			props: {
+				propA: Number, // 基础类型检查,给出 `null` 和 `undefined` 值则会跳过任何类型检查
+				propB: [String, Number], // 多种可能的类型
+    			propC: {
+					type: String,
+					required: true
+				}, // 必传，且为 String 类型
+    			propD: {
+					type: Number,
+					default: 100    // Number 类型的默认值
+    			},  
+				// 对象类型的默认值
+    			propE: {
+					type: Object,
+					// 对象或者数组应当用工厂函数返回。
+					// 工厂函数会收到组件所接收的原始 props作为参数
+					default(rawProps) {
+						return { message: 'hello' }
+					}
+				},
+				// 自定义类型校验函数
+				propF: {
+					validator(value) {
+						// The value must match one of these strings
+						return ['success', 'warning', 'danger'].includes(value)
+					}
+				},
+				// 函数类型的默认值
+				propG: {
+					type: Function,
+					// 不像对象或数组的默认，这不是一个工厂函数。这会是一个用来作为默认值的函数
+					default() {
+						return 'Default function'
+					}
+				}	
+			},
+			components:{
+				myTxtbox,
+				myPswbox
+			},
+			template:'<div><myTxtbox :label="accountname" ></myTxtbox><br><myPswbox></myPswbox></div>'
+		}
+		const vm=Vue.createApp({});
+		vm.component('myRegisterbox', myRegisterbox);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app" >
+		<p>{{rawHTML}}</p>
+		<p v-html="rawHTML"></p>
+	</div>
+	<button onclick="f1()">添加元素</button>
+	<script>
+		const vueapp={
+			data() {
+				return {
+					rawHTML: 0
+				}
+			}
+		}
+		const app=Vue.createApp(vueapp).mount("#app")
+		function f1(){			
+			app.rawHTML = "<span style='color:red;'>HTML元素</span>";
+		}
+	</script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		.child{
+			background-color: red;
+		}
+		.parent{
+			opacity: 0.5;
+			border: 1px solid blue;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<my-registerbox accountname="Email:" class="child"></my-registerbox>
+	</div>
+	<script>
+		const myTxtbox ={
+			props: ['label'],
+			template: '<div ><span>{{label}}</span><input type="text" ></div>'
+		}
+		const myPswbox={
+			template: '<div><span>密码: </span><input type="password" value="请输入"></div>'
+		}
+		const myRegisterbox={
+			props: ['accountname'],
+			components:{
+				myTxtbox,
+				myPswbox
+			},
+			template:'<div class="parent"><myTxtbox :label="accountname" ></myTxtbox><br><myPswbox></myPswbox></div>'
+		}
+		const vm=Vue.createApp({});
+		vm.component('myRegisterbox', myRegisterbox);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		.child{
+			background-color: red;
+		}
+		.parent{
+			opacity: 0.5;
+			border: 1px solid blue;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<my-registerbox accountname="Email:" class="child"></my-registerbox>
+	</div>
+	<script>
+		const myTxtbox ={
+			props: ['label'],
+			template: '<div ><span>{{label}}</span><input type="text" ></div>'
+		}
+		const myPswbox={
+			template: '<div><span>密码: </span><input type="password" value="请输入"></div>'
+		}
+		const myRegisterbox={
+			props: ['accountname'],
+			components:{
+				myTxtbox,
+				myPswbox
+			},
+			inheritAttrs:false, //禁用属性继承
+			//将属性应用于根节点之外的其它元素
+			template:`<div class="parent">
+								<myTxtbox :label="accountname"  v-bind="$attrs"></myTxtbox>
+								<br>
+								<myPswbox></myPswbox>
+							</div>`
+		}
+		const vm=Vue.createApp({});
+		vm.component('myRegisterbox', myRegisterbox);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		.child{
+			background-color: red;
+		}
+		.parent{
+			opacity: 0.5;
+			border: 1px solid blue;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<my-tool class="child" @click="f1"></my-tool>
+	</div>
+	<script>
+		const myTool={
+			data(){
+				return {
+					opdata: 2
+				}
+			},
+			template:`<input type="text" :value="opdata">
+							<input type="button"  v-bind="$attrs" value="计算"> `		
+		}
+		//具有多个根节点的组件无法自动继承属性，需要显示地在指定元素绑定$attrs属性
+		const vm=Vue.createApp({
+			methods:{
+				f1(){
+					alert(0);
+				}
+			}
+		});
+		vm.component('myTool', myTool);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<input type="text" v-model="opdata">
+		<!-- 第三步：给父组件的事件添加响应函数-->
+		<my-tool @increase-by="increaseCount" ></my-tool>
+	</div>
+	<script>
+		const myTool={
+			methods:{
+				f1(){
+					//第二步：关联到父组件的事件
+					this.$emit('increase-by', 1);
+				}
+			},
+			//第一步：定义子组件事件及其响应函数
+			template:'<button @click="f1" >Increased by 1</button> '			
+		}
+		const vm=Vue.createApp({
+			data(){
+				return{
+					opdata:2
+				}
+			},
+			methods:{
+				increaseCount(n){
+					this.opdata += n;
+				}
+			}
+		});
+		vm.component('myTool', myTool);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<post-list  ></post-list  >
+	</div>
+	<script>
+		const PostListItem={
+			props:['post'],
+			methods:{
+				f1(){
+					this.$emit('vote');
+				}
+			},
+			template:'<li>标题：{{post.title}} | {{post.author}} | 点赞数：{{post.vote}}<button @click="f1">赞</button></li>'
+		}
+		const PostList={
+			data(){
+				return {
+					posts: [
+									{id:1, title:'《HTML》',author:'张三', date:"",vote:0},
+									{id:2, title:'《CSS》',author:'李四', date:"",vote:0},
+									{id:3, title:'《JS》',author:'王五', date:"",vote:0}
+								]
+				}
+			},
+			methods:{
+				handleVote(id){
+					this.posts[id].vote++;
+				}
+			},
+			components:{
+				PostListItem
+			},
+			template:'<ul><PostListItem v-for="(post,index) in posts" :post="post" @vote="handleVote(index)"></PostListItem></ul> '			
+		}
+		//具有多个根节点的组件无法自动继承属性，需要显示地在指定元素绑定$attrs属性
+		const vm=Vue.createApp({});
+		vm.component('PostList', PostList);
+		vm.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		.tab{
+			border: 1px solid #ccc;
+			padding: 10px;
+		}
+		div{
+			width: 400px;
+			height:400px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<button v-for="tab in tabs"  @click="currentTab=tab.title">{{tab.displayName}}</button>
+		<component :is="currentTabComponent" class="tab"></component>
+	</div>
+	<script>
+		const app=Vue.createApp({
+			data(){
+				return{
+					currentTab: 'introduce',
+					tabs:[{title:'introduce',displayName:'图书介绍'},
+							{title:'comment',displayName:'图书评价'},
+							{title:'qa',displayName:'图书问答'}]
+				}
+			},
+			computed:{
+				currentTabComponent(){
+					return 'tab-'+this.currentTab;
+				}
+			}
+		});
+		app.component('tab-introduce',{
+			data(){
+				return{
+					content: 'Java 无难事'
+				}
+			},
+			template: '<div><input type="text" v-model="content"></div>'
+		});
+		app.component('tab-comment',{
+			template: '<div>这是一本好书</div>'
+		});
+		app.component('tab-qa',{
+			template: '<div>有人看过吗？怎么样？</div>'
+		});
+		app.mount("#app");
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<!-- 采用CDN方式引用Vue Router -->
+	<script src="https://unpkg.com/vue-router@4"></script>
+	<style>
+		.content{
+			border:1px solid black;
+			width:300px;
+			height:400px;
+			padding:10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<div>
+			<!--<router-link to="目标端点">源端点</router-link> -->
+			<router-link to="/">主页 | </router-link>
+			<router-link to="/news">新闻 | </router-link>
+			<router-link to="/books">图书 | </router-link>
+			<router-link to="/videos">视频</router-link>
+		</div>
+		<!-- 目标端点的target -->
+		<router-view></router-view>
+	</div>
+	<script>
+		//路由组件对象
+		const Home={template:'<div class="content">主页面</div>'};
+		const News={template:'<div class="content">新闻页面</div>'};
+		const Books={template:'<div class="content">图书页面</div>'};
+		const Videos={template:'<div class="content">视频页面</div>'};
+		//路由对象：链接路径→路由组件		
+		const routes=[
+			{path: '/', component:Home},
+			{path: '/news', component:News},
+			{path: '/books', component:Books},
+			{path: '/videos', component:Videos}
+		]; //在超链接中，目标端点是一个网址或一个书签，这里目标端点是一个组件 
+		//路由
+		const router=VueRouter.createRouter({
+			history: VueRouter.createWebHashHistory(),
+			routes
+		});
+		const app=Vue.createApp({});
+		//应用路由
+		app.use(router);
+		app.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://unpkg.com/vue-router@4"></script>
+	<style>
+		.content{
+			border:1px solid black;
+			width:300px;
+			height:400px;
+			padding:10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<div>
+			<router-link to="/">主页 | </router-link>
+			<router-link to="/news">新闻 | </router-link>
+			<!-- 两条路径要链接到同一个组件上去 -->
+			<router-link to="/books/1">图书1 | </router-link>
+			<router-link to="/books/2">图书2 | </router-link>
+			<router-link to="/videos">视频</router-link>
+		</div>
+		<router-view></router-view>
+	</div>
+	<script>
+		//路由组件对象
+		const Home={template:'<div class="content">主页面</div>'};
+		const News={template:'<div class="content">新闻页面</div>'};
+		const Books={template:'<div class="content">图书页面{{$route.params.id}}</div>'};
+		const Videos={template:'<div class="content">视频页面</div>'};
+		//路由对象：关联链接路径和路由组件
+		const routes=[
+			{path: '/', component:Home},
+			{path: '/news', component:News},
+			{path: '/books/:id', component:Books},
+			//组件的路径的动态段（称为：参数，用冒号表示）
+			//参数的值被保存到this.$route.params中，可以在组件内使用
+			//this.$route表示当前路由对象
+			{path: '/videos', component:Videos}
+		];
+		//路由
+		const router=VueRouter.createRouter({
+			history: VueRouter.createWebHashHistory(),
+			routes
+		});
+		const app=Vue.createApp({});
+		//应用路由
+		app.use(router);
+		app.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://unpkg.com/vue-router@4"></script>
+	<style>
+		.book_image_style{
+			height:200px;
+			width:200px;
+		}
+		.book_style{
+			height:270px;
+			width:200px;
+			border: 1px solid black;
+			margin: 10px;
+			padding:5px;
+			display:inline-block;
+		}
+	</style>
+</head>
+<body>
+	<div style="border:1px solid black; height:50px;width:100%;">
+		<div style="text-align:center;font-size:32;font-weight:bolder;color:blue;">欢迎使用布克斯购物商城</div>
+	</div>
+	<div style="border:1px solid black; height:auto;width:100%;" id="app1">
+		<div style="border:1px solid black; height:calc(100% - 50px);box-sizing: border-box;width:20%;float:left;">
+				<ul>
+					<li>图书
+						<ul>
+							<li><router-link to="/books/1">水浒传 </router-link></li>
+							<li><router-link to="/books/2">三国演义</router-link></li>
+						</ul>
+					</li>
+					<li>家电</li>
+					<li>美食</li>
+					<li>服装</li>
+				</ul>
+		</div>
+		<div style="border:1px solid black; height:calc(100% - 50px);box-sizing: border-box;width:60%;float:left; overflow:auto;">
+			<!-- （5.2）使用<router-view>组件创建target视图 -->
+			<router-view></router-view>
+		</div>
+		<div style="border:1px solid black; height:calc(100% - 50px);box-sizing: border-box;width:20%;float:left;">
+
+		</div>
+	</div>
+	<template id="t1">
+		<div class="book_style">
+						<img :src="bookInfo.imagePath" class="book_image_style"><br>
+						书名：{{bookInfo.title}}<br>
+						作者：{{bookInfo.author}}<br>
+						单价：{{bookInfo.price}}
+					</div>
+	</template>
+	<script>
+	const books=[
+		{
+			imagePath:'./images/book1.jpeg',
+			title:'水浒传',
+			author:'施耐庵',
+			price:'39.9',
+			count:0
+		},
+		{
+			imagePath:'./images/book2.jpeg',
+			title:'三国演义',
+			author:'罗贯中',
+			price:'39.9',
+			count:0
+		}
+	];
+	const bookComponent={
+		computed:{
+			bookInfo (){
+				return books[this.$route.params.id-1];
+			}
+		},
+		template:'#t1'
+	}
+	//（2）路由对象：链接路径→路由组件		
+		const routes=[
+			{path: '/books/:id', component:bookComponent},
+		]; 
+		//（3）创建路由器实例
+		const router=VueRouter.createRouter({
+			history: VueRouter.createWebHashHistory(),
+			routes
+		});
+		const app=Vue.createApp({});
+		//（4）注册路由器插件
+		app.use(router);
+		app.mount('#app1');
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<!-- 采用CDN方式引用Vue Router -->
+	<script src="https://unpkg.com/vue-router@4"></script>
+	<style>
+		.content{
+			border:1px solid black;
+			width:300px;
+			height:400px;
+			padding:10px;
+		}
+		.subcontent{
+			border:1px solid black;
+			width:250px;
+			height:200px;
+			padding:10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<div>
+			<!--<router-link to="目标端点">源端点</router-link> -->
+			<router-link to="/">主页 | </router-link>
+			<router-link to="/news">新闻 | </router-link>
+			<router-link to="/books">图书 | </router-link>
+			<router-link to="/videos">视频</router-link>
+		</div>
+		<!-- 目标端点的target -->
+		<router-view></router-view>
+	</div>
+	<script>
+		//路由组件对象
+		const Home={template:'<div class="content">主页面</div>'};
+		const News={template:'<div class="content">新闻页面</div>'};
+		const Books = {
+									data(){
+										return{
+											books:[
+															{id:1, title: 'HTML', desc:'hello, HTML'},
+															{id:2, title: 'CSS', desc:'hello, css'},
+															{id:3, title: 'JS', desc:'hello, js'}
+														]
+										}
+									},
+									template: `<div class="content">
+													<h3>图书列表</h3>
+													<ul>
+														<li v-for="book in books" :key="book.id">
+															<router-link :to="'/books/book/'+book.id">{{book.title}}</router-link>
+														</li>
+													</ul>
+													<router-view></router-view>
+												</div>`
+								};
+		const Book={
+								data(){
+										return{
+											books:[
+															{id:1, title: 'HTML', desc:'hello, HTML'},
+															{id:2, title: 'CSS', desc:'hello, css'},
+															{id:3, title: 'JS', desc:'hello, js'}
+														]
+										}
+								},
+								template:'<div class="subcontent">{{books[this.$route.params.id-1].desc}}</div>',
+							};
+		const Videos={template:'<div class="content">视频页面</div>'};
+		//路由对象：链接路径→路由组件		
+		const routes=[
+			{path: '/', component:Home},
+			{path: '/news', component:News},
+			{path: '/books', component:Books, children:[{path:'book/:id', component:Book}]},
+			{path: '/videos', component:Videos}
+		]; //在超链接中，目标端点是一个网址或一个书签，这里目标端点是一个组件 
+		//路由
+		const router=VueRouter.createRouter({
+			history: VueRouter.createWebHashHistory(),
+			routes
+		});
+		const app=Vue.createApp({});
+		//应用路由
+		app.use(router);
+		app.mount('#app1');
+	</script>	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<!-- 采用CDN方式引用Vue Router -->
+	<script src="https://unpkg.com/vue-router@4"></script>
+	<style>
+		.content{
+			border:1px solid black;
+			width:300px;
+			height:400px;
+			padding:10px;
+		}
+		.subcontent{
+			border:1px solid black;
+			width:250px;
+			height:200px;
+			padding:10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app1">
+		<div>
+			<!--<router-link to="目标端点">源端点</router-link> -->
+			<router-link to="/">主页 | </router-link>
+			<!-- 采用路由名称进行链接-->
+			<router-link :to="{name:'news'}">新闻 | </router-link>
+			<router-link to="/books">图书 | </router-link>
+			<router-link to="/videos">视频</router-link>
+		</div>
+		<!-- 目标端点的target -->
+		<router-view></router-view>
+	</div>
+	<script>
+		//路由组件对象
+		const Home={template:'<div class="content">主页面</div>'};
+		const News={template:'<div class="content">新闻页面</div>'};
+		const Books = {
+									data(){
+										return{
+											books:[
+															{id:1, title: 'HTML', desc:'hello, HTML'},
+															{id:2, title: 'CSS', desc:'hello, css'},
+															{id:3, title: 'JS', desc:'hello, js'}
+														]
+										}
+									},
+									template: `<div class="content">
+													<h3>图书列表</h3>
+													<ul>
+														<li v-for="book in books" :key="book.id">
+															<router-link :to="'/books/book/'+book.id">{{book.title}}</router-link>
+														</li>
+													</ul>
+													<router-view></router-view>
+												</div>`
+								};
+		const Book={
+								data(){
+										return{
+											books:[
+															{id:1, title: 'HTML', desc:'hello, HTML'},
+															{id:2, title: 'CSS', desc:'hello, css'},
+															{id:3, title: 'JS', desc:'hello, js'}
+														],
+											book:{}
+										}
+								},
+								template:'<div class="subcontent">{{book.desc}}</div>',
+								created(){
+									this.book=this.books[this.$route.params.id-1];
+									this.$watch( ()=>this.$route.params, (toParams)=>{this.book=this.books[toParams.id-1]});
+								}
+							};
+		const Videos={template:'<div class="content">视频页面</div>'};
+		//路由对象：链接路径→路由组件		
+		const routes=[
+			{path: '/', component:Home},
+			//设置路由名称
+			{path: '/news', name:'news', component:News},
+			{path: '/books', component:Books, children:[{path:'book/:id', component:Book}]},
+			{path: '/videos', component:Videos}
+		]; //在超链接中，目标端点是一个网址或一个书签，这里目标端点是一个组件 
+		//路由
+		const router=VueRouter.createRouter({
+			history: VueRouter.createWebHashHistory(),
+			routes
+		});
+		const app=Vue.createApp({});
+		//应用路由
+		app.use(router);
+		app.mount('#app1');
+	</script>
+	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app" >
+		<input type="radio" name="c1" onclick="f1()" checked>VIP客户
+		<input type="radio" name="c1" onclick="f2()">普通客户
+		<div v-show="yes">
+			请输入手机号：<input type="text" name="txt1">
+		</div>
+	</div>	
+	<script>
+		const vueapp={
+			data() {
+				return {
+					yes: true
+				}
+			}
+		}
+		const app=Vue.createApp(vueapp).mount("#app")
+		function f1(){			
+			app.yes = true;
+		}
+		function f2(){			
+			app.yes = false;
+		}
+	</script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app" >
+		<h1 v-if="yes">YES!</h1>
+		<h1 v-if="no">NO!</h1>
+		<h1 v-if="age>=25">Age:{{age}}</h1>
+		<h1 v-if="name.indexOf('Smith')>=0">Name:{{name}}</h1>
+		<template v-if="no">
+			username:<input type="text"><br>
+			password:<input type="password">
+		</template>
+	</div>	
+	<script>
+		const vueapp={
+			data() {
+				return {
+					yes: true,
+					no: false,
+					age: 28,
+					name: 'Will Smith'
+				}
+			}
+		}
+		const app=Vue.createApp(vueapp).mount("#app")
+	</script>
+	
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app" >
+		<span v-if="score>=85">优秀</span>
+		<span v-else-if="score>=75">继续努力</span>
+		<span v-else-if="score>=60">加油</span>
+		<span v-else>别灰心</span>
+	</div>	
+	<script>
+		const vueapp={
+			data() {
+				return {
+					score: 78
+				}
+			}
+		}
+		const app=Vue.createApp(vueapp).mount("#app")
+	</script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app" >
+		<ul>
+			<li v-for="book in books">{{book.title}}</li>
+			<!--book in books  也可以写成 book of books -->
+		</ul>
+		-------------------------------------------------
+		<ul>
+			<li v-for="(book,index) of books">{{index}}-{{book.title}}</li>
+		</ul>
+		-------------------------------------------------
+		<ul>
+			<li v-for="n in 5">{{n}}</li>
+		</ul>
+		-------------------------------------------------
+		<ul>
+			<li v-for="value in bookinfo">{{value}}</li>
+		</ul>
+		-------------------------------------------------
+		<ul>
+			<li v-for="(value,key) in bookinfo">{{key}}: {{value}}</li>
+		</ul>
+		-------------------------------------------------
+		<ul>
+			<li v-for="(value,key,index) in bookinfo">{{index}}.{{key}}: {{value}}</li>
+		</ul>
+	</div>
+	<button onclick="f1()">更新</button>
+	<script>
+		const vueapp={
+			data() {
+				return {
+					books: [
+						{title: 'HTML'},
+						{title: 'CSS'},
+						{title: 'JS'}						
+					], //books是一个数组
+					bookinfo:{
+						title: "web前端基础及框架",
+						author: "w3school",
+						isbn: "9878967543"
+					}
+				}
+			}
+		}
+		const app=Vue.createApp(vueapp).mount("#app")
+		function f1(){
+			app.books.push({title: 'Vue.js'});
+			//app.books.pop();
+			//app.books.shift();
+			//app.books.sort();
+			//app.books.reverse();
+		}
+	</script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app" >
+		<ul>
+			<template v-for="book in books">
+				<li>{{book.title}}</li>
+				<li>{{book.author}}</li>
+			</template>
+		</ul>
+	</div>
+	<script>
+		const vueapp={
+			data() {
+				return {
+					books: [
+						{
+							id: 1,
+							title: "HTML",
+							author: "张三",
+							price: "27.50"
+						},
+						{
+							id: 2,
+							title: "CSS",
+							author: "李四",
+							isbn: "33.00"
+						},					
+					]
+				}
+			}
+		}
+		const app=Vue.createApp(vueapp).mount("#app")
+	</script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app" >
+		<!-- 绑定一个属性 -->
+		第一张图片：<img v-bind:src="imgsrc"><br>
+		
+		<!-- 简写语法 -->
+		第二张图片：<img :src="imgsrc"><br>
+
+		<!-- 动态属性名 -->
+		第三张图片：<img v-bind:[attrname]="imgsrc"><br>
+		
+		<!-- 内联字符串拼接 -->
+		第四张图片：<img :src="'images/'+fileName"><br>
+		
+		<!-- 绑定一个有属性的对象 -->
+		第五张图片：<img v-bind="attrObj"><br>
+	</div>	
+	<script>
+		const vueapp={
+			data() {
+				return {
+					attrname: 'src',
+					imgsrc: 'images/bg.gif',
+					fileName: 'bg.gif',
+					attrObj:{
+						src: 'images/bg.gif'
+					}
+				}
+			}
+		}
+		const app=Vue.createApp(vueapp).mount("#app");
+	</script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+		{{message}}
+		<input type="text"  v-model="message">
+		<br>--------------------------------------------------<br>
+		<input type="radio" value="男" v-model="gender">男
+		<input type="radio" value="女" v-model="gender">女
+		<h2>你选择的性别是:{{gender}}</h2>
+		--------------------------------------------------<br>
+		<input type="checkbox" id="agree" v-model="isAgree">同意协议 
+		<button :disabled="!isAgree">下一步</button>
+		<br>--------------------------------------------------<br>
+		<input type="checkbox" value="篮球" v-model="hobbies">篮球
+		<input type="checkbox" value="足球" v-model="hobbies">足球
+		<input type="checkbox" value="乒乓球" v-model="hobbies">乒乓球
+		<input type="checkbox" value="排球" v-model="hobbies">排球
+		<h2>您的选择：{{hobbies}}</h2>
+		<br>--------------------------------------------------<br>
+		<select name="" id="" v-model="fruit">
+			<option value="苹果">苹果</option>
+			<option value="西瓜">西瓜</option>
+			<option value="芒果">芒果</option>
+			<option value="葡萄">葡萄</option>
+		</select>
+		<h2>您的选择：{{fruit}}</h2>
+		<br>--------------------------------------------------<br>
+		<select name="" id="" v-model="hobbies" multiple>
+			<option value="篮球">篮球</option>
+			<option value="足球">足球</option>
+			<option value="乒乓球">乒乓球</option>
+			<option value="排球">排球</option>
+		</select>
+		<h2>您的选择：{{hobbies}}</h2>
+		<br>--------------------------------------------------<br>
+		<p v-once>{{fruit}}
+			<span>{{hobbies}}</span>
+		</p>
+    </div>
+    <script>
+		const vueapp={
+			data() {
+				return{
+					message:"用户帐号",
+					gender:"男",
+					isAgree:true,
+					hobbies:[],
+					fruit:"西瓜"
+				}
+			}
+		}
+		const vm=Vue.createApp(vueapp).mount("#app");
+    </script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+		1、使用v-on指令绑定事件处理器<br>
+		<input type="button" value=" +1 " v-on:click="count++">
+		<span>count:{{count}}</span>
+		<br><br>
+		<!--v-on 可以接受一个方法名-->
+		<input type="button" value=" Greet " v-on:click="greet"> 
+		<!--v-on 也可以接受某个方法的调用-->
+		<input type="button" value=" Greet() " v-on:click="greet()">
+		<br>
+		<!--注意：HTML的事件属性中只能是方法的调用，不能是方法名-->
+		<button onclick="f1();">11111</button>
+		<br><br>
+		<!-- v-on 可以简写为 @ -->
+		<input type="button" value=" Hi " @click="say('hello, web')">
+		<br><br>
+		2、使用v-on指令绑定的事件处理器中可以有多个方法<br>
+		<input type="button" value=" Hi + Count " @click="count++, say('hello, web')">
+		<span>count:{{count}}</span>
+		<br><br>
+		<input type="button" value=" Hi + Hi" @click="say('hello, Vue'), say('hello, web')">
+		<br><br>
+		<!-- 下面greet中的alert没有弹出消息框 @ -->
+		<input type="button" value=" Hi + Greet" @click="greet, say('hello, web')">
+		<br><br>
+		3、使用$event传入原始的DOM事件对象，
+		然后在事件处理器方法中访问原生的事件对象<br>
+		<a href="https://www.baidu.com/" @click="login($event)">Login</a>
+		
+		<br><br>方法事件处理器也可以自动接收原生 DOM 事件并触发执行<br>
+		<a href="https://www.baidu.com/" @click="login">Login</a>
+		<br><br>
+		
+		4、使用Vue的事件修饰符<br>
+		<!-- 打开目标端点的默认行为被阻止 .prevent-->
+		<a href="https://www.baidu.com/" @click.prevent="say('hello, Vue')">Login</a><br>
+		
+		<!-- 提交事件将不再重新加载页面 .prevent -->
+		<form @submit.prevent="say('hello, form')">
+			<input type="text" value="name">
+			<input type="submit">
+		</form><br>
+
+		<!-- 单击事件将停止传递 .stop-->
+		<div @click="say('black div')" style="padding:10px;border:1px solid black">
+			<p @click.stop="say('red p')" style="border:1px solid red">单击事件将停止传递</p>
+		</div>
+		<br>
+		
+		<!-- 仅当 event.target 是元素本身时才会触发事件处理器 .self-->
+		<div @click.self="say('hello, Vue')" style="padding:10px;border:1px solid black">
+			<a href="https://www.baidu.com/" @click.prevent="say('hello, a')" style="border:1px solid red">hello, a</a><br>
+			点击div才say hello vue
+		</div><br>
+		
+		<!-- 添加事件监听器时，使用 `capture` 捕获模式 -->
+		<!-- 例如：指向内部元素的事件，在被内部元素处理前，先被外部处理 -->
+		<div @click.capture="say('black div')" style="padding:10px;border:1px solid black">
+			<p @click.stop="say('red p')" style="border:1px solid red">使用 `capture` 捕获模式</p>
+		</div>
+		
+		<!-- 点击事件最多被触发一次 .once -->
+		<p @click.once="say('p')">使用.once 点击事件最多被触发一次</p>
+
+		<!-- 以下为官方教程上的一个示例，但是运行无法达到预期效果 -->
+		<!-- 滚动事件的默认行为 (scrolling) 将立即发生而非等待 `onScroll` 完成 .passive-->
+		<!-- 以防其中包含 `event.preventDefault()` -->
+		<div @scroll.passive="onScroll" style="padding:10px;border:1px solid black; width:100px;height:200px;overflow-y: scroll;">
+			滚动事件的默认行为 (scrolling) 将立即发生而非等待 `onScroll` 完成
+			以防其中包含 `event.preventDefault()` 
+			滚动事件的默认行为 (scrolling) 将立即发生而非等待 `onScroll` 完成
+			以防其中包含 `event.preventDefault()` 
+		</div><br>
+				
+		<!-- 可以只有修饰符 -->
+		<form @submit.prevent>
+			<input type="text" value="name">
+			<input type="submit">
+		</form><br>
+		
+		<!-- 修饰语可以使用链式书写 -->
+		<div @click="say('black div')" style="padding:10px;border:1px solid black">
+			<a href="https://www.baidu.com/" @click.stop.prevent="say('hello, a')">单击事件停止传递,默认行为被阻止</a><br>
+		</div><br>
+		<!--
+		使用修饰符时需要注意调用顺序，因为相关代码是以相同的顺序生成的。
+		因此使用 @click.prevent.self 会阻止元素及其子元素的所有点击事件的默认行为，
+		而 @click.self.prevent 则只会阻止对元素本身的点击事件的默认行为。-->
+		
+		5、使用Vue的按键修饰符<br>
+		<!-- 仅在 `key` 为 `Enter` 时调用 `say` -->
+		<input type="text" value="name"  @keyup.enter="say('hi, input text')"><br><br>
+		<input type="text" value="name"  @keyup.page-down="say('hi, input text')" /><br><br>
+
+		6、使用Vue的鼠标按键修饰符<br>
+		<!-- 鼠标按键修饰符.left   .right   .middle -->
+		<p @click.right="say('hi')">用鼠标右键点击才say hi</p>
+		<br><br><br>
+    </div>
+	
+    <script>
+		function f1(){
+			alert("1111")
+		}
+		const vueapp={
+			data() {
+				return{
+					count: 0,
+					message:"hello, vue.js"
+				}
+			},
+			methods: {
+				greet: function(){  //可以简写为：greet(){
+					alert(this.message);
+				},
+				say(msg){
+					alert(msg);
+				},
+				login(event){
+					let str=prompt("input your name:");
+					if(str=="")
+						event.preventDefault(); //默认行为被阻止
+						//event的属性和方法见PPT
+				},
+				onScroll(event){
+					alert("do not scroll");
+					event.preventDefault(); 
+				}
+			}
+		}
+		const vm=Vue.createApp(vueapp).mount("#app");
+    </script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		body{
+			width: 600px;
+		}
+		table{
+			border: 1px solid black;
+			width: 100%;
+		}
+		th {height:50px;}
+		th, td{
+			border-bottom: 1px solid #ddd;
+			text-align: center;
+		}
+		[v-cloak]{
+			display: none;
+		}
+		.even{
+			background-color: #cdcdcd;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<table>
+			<tr>
+				<th>序号</th>
+				<th>商品名称</th>
+				<th>单价</th>
+				<th>数量</th>
+				<th>金额</th>
+				<th>操作</th>
+			</tr>
+			<tr v-for="(book,index) in books" :class="{even: (index+1)%2===0}" >
+				<td>{{book.id}}</td>
+				<td>{{book.title}}</td>
+				<td>{{book.price}}</td>
+				<td>
+					<button v-bind:disabled="book.count===0" v-on:click="book.count-=1">-</button>
+					{{book.count}}
+					<button v-on:click="book.count+=1">+</button>
+				</td>
+				<td>{{itemPrice(book.price, book.count)}}</td>
+				<td>
+					<button @click="deleteItem(index)">删除</button>
+				</td>
+			</tr>
+		</table>
+		<span>总价：{{totalPrice}}元</span>
+	</div>
+	<script>
+		const vm=Vue.createApp({
+			data(){
+				return{
+					books:[
+						{id:1, title:'Java无难事', price:188,count:1},
+						{id:2, title:'VC++深入详解', price:168, count:1},
+						{id:3, title:'web前端开发技术', price:139, count:2},
+						{id:4, title:'web前端框架', price:139, count:2}
+					]
+				}
+			},
+			methods:{
+				itemPrice(price, count){
+					return price*count;
+				},
+				deleteItem(index){
+					this.books.splice(index, 1); 
+				}
+			},
+			computed:{
+				totalPrice(){
+					let total=0;
+					for(let book of this.books)
+						total+=book.price*book.count;
+					return total;
+				}
+			}
+		}).mount("#app");
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<ul id="app">
+		<li v-for="menu in menus" @mouseover="menu.show=!menu.show" @mouseout="menu.show=!menu.show">
+			<a href="menu.url">{{menu.name}}</a>
+			<ul v-show="menu.show">
+				<li v-for="submenu in menu.subMenus">
+					<a href="submenu.url">{{submenu.name}}</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<script>
+		const menulist={
+			menus:[
+				{
+					name: "我的淘宝",
+					url: "#",
+					show:false,
+					subMenus:[{name:"已买到的宝贝",url:"#"},{name:"已卖出的宝贝",url:"#"}]
+				},
+				{
+					name: "收藏夹",
+					url: "#",
+					show:false,
+					subMenus:[{name:"收藏的宝贝",url:"#"},{name:"收藏的店铺",url:"#"}]
+				}
+			]
+		}
+		const vm=Vue.createApp({
+			data(){
+				return menulist;
+			}
+		}).mount('#app');
+	</script>
+</body>
+</html>
+<html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app1">
+		<combo list="HTML CSS JavaScript Vue.js" initval="CSS">选择课程：</combo>
+	</div>
+	<template id="c1">
+		<slot></slot>
+		<input type="text" v-model="selValue">
+		<select v-model="selValue">
+			<option v-for="item in items" >{{item}}</option>
+		</select>
+	</template>
+	<script>
+		const comObj={
+			data(){
+				return {
+					items: this.list.split(' '),
+					selValue: this.initval
+				}
+			},
+			props:['list', 'initval'],
+			template: '#c1'
+		}
+		const vm=Vue.createApp({});
+		vm.component('combo', comObj);
+		vm.mount("#app1");
+	</script>	
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<style>
+		h3{
+			text-align:center;
+		}
+		#app{
+			border: 1px solid black;
+			width:280px;
+			padding:10px;
+			margin:10px;
+		}
+		span{
+			display:inline-block;
+			width:90px;
+			padding:5px;
+		}
+	</style>
+</head>
+<body>
+	<div id='app'>
+		<form @submit="register">
+		<h3>用户注册</h3>
+		<span>用户名：</span>
+		<input type='text' v-model='user.username'><br>
+		<span>密码：</span>
+		<input type='password' v-model='user.password'><br>
+		<span>性别：</span>
+		<input type='radio' name='gender' value='male' v-model='user.gender'>男 
+		<input type='radio' name='gender' value='female' v-model='user.gender'>女<br>
+		<span>邮件地址：</span>
+		<input type='text' v-model='user.email'><br>
+		<span>密码问题：</span>
+		<input type='text' v-model='user.pswQuestion'><br>
+		<span>密码答案：</span>
+		<input type='text' v-model='user.pswAnswer'><br>
+		<span style="padding:10px;">	<input type="submit" value="注册" ></span>
+		<span style="padding:10px">	<input type="reset" value="重置"></span>
+		</form>
+	</div>
+	<script>
+		const vm=Vue.createApp({
+			data(){
+				return{
+					user: {
+						username:'张三',
+						password:'000000',
+						gender:'male',
+						email:'000000@qq.com',
+						pswQuestion:'最喜欢的学科',
+						pswAnswer:'web前端'
+					}
+				}
+			},
+			methods:{
+				register(){
+					//send the object :user
+					var str = this.user.username + ',  ' + this.user.password + ',  ' + this.user.gender + ',  ' + this.user.email;
+					str = str + ',  ' + this.user.pswQuestion + ',  ' + this.user.pswAnswer; 
+					alert(str);
+				}
+			}
+		}).mount("#app");
+	</script>
+</body>
+</html><html>
+<head>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+	<div id="app">
+		<table>
+			<tr>
+				<th>序号</th>
+				<th>商品名称</th>
+				<th>单价</th>
+				<th>数量</th>
+				<th>金额</th>
+				<th>操作</th>
+			</tr>
+			<tr v-for="(book,index) in books" >
+				<td>{{book.id}}</td>
+				<td>{{book.title}}</td>
+				<td>{{book.price}}</td>
+				<td>
+					<button v-bind:disabled="book.count===0" v-on:click="book.count-=1">-</button>
+					{{book.count}}
+					<button v-on:click="book.count+=1">+</button>
+				</td>
+				<td>{{itemPrice(book.price, book.count)}}</td>
+				<td>
+					<button @click="deleteItem(index)">删除</button>
+				</td>
+			</tr>
+		</table>
+		<span>总价：{{totalPrice}}元</span>
+	</div>
+	<script>
+		const vm=Vue.createApp({
+			data(){
+				return{
+					books:[
+						{id:1, title:'Java无难事', price:188,count:1},
+						{id:2, title:'VC++深入详解', price:168, count:1},
+						{id:3, title:'web前端开发技术', price:139, count:2}
+					]
+				}
+			},
+			methods:{
+				itemPrice(price, count){
+					return price*count;
+				},
+				deleteItem(index){
+					this.books.splice(index, 1); 
+				}
+			},
+			computed:{
+				totalPrice(){
+					let total=0;
+					for(let book of this.books)
+						total+=book.price*book.count;
+					return total;
+				}
+			}
+		}).mount("#app");
+	</script>
+</body>
+</html>
